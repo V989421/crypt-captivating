@@ -1,0 +1,21 @@
+{
+  "name": "crypt-captivating",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@3rdweb/hooks": "^1.6.0",
+    "@next/font": "13.1.6",
+    "ethers": "^6.3.0",
+    "next": "13.1.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "sweetalert2": "^11.7.3",
+    "web3": "^1.9.0"
+  }
+}
