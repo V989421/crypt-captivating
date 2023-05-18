@@ -11,8 +11,12 @@ const Hero = () => {
             <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-white">We decentralise stuff</h1>
             <p className="mb-8 leading-relaxed text-xl mr-16">to prosper and maintain product traceability with promise in the agricultural food supply chain</p>
             <div className="flex justify-center">
+            <Link href="/components/items">
               <button className="inline-flex text-white bg-gradient-to-r from-lime-500 to-green-600 border-0 py-2 px-6 focus:outline-none hover:bg-gradient-to-l from-green-500 to-lime-600 rounded text-lg mr-10">Buy things</button>
-              <button className="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-white-200 rounded text-lg ml-10">Contact</button>
+              </Link>
+              <Link href="/components/contact">
+              <button className="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-white-200 rounded text-lg ml-10">Contact</button> 
+              </Link>
             </div>
           </div>
           <div className="-ml-20">
@@ -115,21 +119,23 @@ const Hero = () => {
             </div>
             <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
               <a className="block relative h-48 rounded overflow-hidden">
-                <Image src="/brocoli.jpg" alt="Vegetables" width="600" height="500" className='rounded-2xl' />
+                <Image src="/Beetroot.jpg" alt="Vegetables" width="600" height="500" className='rounded-2xl' />
                 </a>
               <div className="mt-4 -mb-10">
                 <h3 className="text-white-500 text-xs tracking-widest title-font mb-1">CATEGORY VEGETABLES</h3>
-                <h2 className="text-white-900 title-font text-lg font-medium">Brocoli</h2>
+                <h2 className="text-white-900 title-font text-lg font-medium">Beetroot</h2>
                 <p className="mt-1">Ξ 0.005 ETH</p>
               </div>
             </div>
           </div>
         </div>
-        <span className='ml-52'/><button className="inline-flex items-center bg-gradient-to-r from-lime-500 to-green-600 border-0 py-2 px-6 focus:outline-none hover:bg-gradient-to-l from-green-500 to-lime-600 text-white border-0 py-2 px-5 rounded text-base -mt-20 mb-10 ml-96 md:mt-0">Search More
+        <div className="ml-96">
+        <span className='ml-52'/><button className="inline-flex items-center bg-gradient-to-r from-lime-500 to-green-600 border-0 py-2 px-6 ml-20 focus:outline-none hover:bg-gradient-to-l from-green-500 to-lime-600 text-white border-0 py-2 px-5 rounded text-base -mt-20 mb-10 md:mt-0">Search More
         <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 ml-1" viewBox="0 0 24 24">
           <path d="M5 12h14M12 5l7 7-7 7"></path>
         </svg>
       </button>
+        </div>
       </section>
       <section className="text-dark-500 bg-white">
       <h1 className='text-center text-4xl font-bold pt-10'>Not Impressed Yet ?... </h1>

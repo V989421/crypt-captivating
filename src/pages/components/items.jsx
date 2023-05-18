@@ -5,9 +5,95 @@ import Link from 'next/link'
 import styles from "@/styles/Home.module.css";
 import { Footer } from "./index";
 import { ethers } from 'ethers';
+import Web3 from 'web3';
+import Web3Modal from "web3modal"
+import Swal from 'sweetalert';
+import { ToastContainer, toast } from 'react-toastify';
+import axios from 'axios';
 
 const Items = () => {
+  const [item, setItem] = useState(null);
+  const [web3, setWeb3] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [contract, setContract] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const contractABI = [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "price",
+          "type": "uint256"
+        }
+      ],
+      "name": "buyItem",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "spender",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "approve",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ];
+  
+  const buyOnEth = (itemPrice, itemAddress) => {
+    const providerOptions = {
+      metamask: {
+        id: 'injected',
+        name: 'MetaMask',
+        type: 'web3',
+        check: 'isMetaMask'
+      }
+    };
+    const web3Modal = new Web3Modal({
+      network: 'mainnet',
+      cacheProvider: true,
+      providerOptions
+    });
+    const provider = web3Modal.connect();
+    const ethersProvider = new ethers.providers.Web3Provider(provider);
+    const signer = ethersProvider.getSigner();
+    console.log('Item purchased successfully!');
+    return { ethersProvider, signer };
+  }
 
+  // const handleBuyNowClick = () => {
+  //     Swal.fire({
+  //         title: 'Failure',
+  //         text: 'Something went wrong!',
+  //         icon: 'error',
+  //         confirmButtonText: 'OK'
+  //       });
+  // }
+
+  const handleBuyNowClick = () => {
+    setShowPopup(true);
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
+  };
 
   return (
     <div>
@@ -32,7 +118,7 @@ const Items = () => {
               About
             </Link>
             <Link href="/components/items" className="mr-5 hover:text-gray-400">
-              Items
+              Products
             </Link>
             <Link href="/components/contact" className="mr-5 hover:text-gray-400">Contact
             </Link>
@@ -40,7 +126,7 @@ const Items = () => {
             </Link>
           </nav>
           <Link href="/components/wallet">
-            <button className="inline-flex items-center bg-gradient-to-r from-lime-500 to-green-600 border-0 py-2 px-6 focus:outline-none hover:bg-gradient-to-l from-green-500 to-lime-600 text-white border-0 -mr-10 py-2 px-5 rounded text-base mt-4 md:mt-0">Check Balance
+          <button className="inline-flex items-center bg-gradient-to-r from-lime-500 to-green-600 border-0 py-2 px-6 focus:outline-none hover:bg-gradient-to-l from-green-500 to-lime-600 text-white border-0 mr-10 py-2 px-5 rounded text-base mt-4 md:mt-0">Check Balance
               <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
                 <path d="M5 12h14M12 5l7 7-7 7"></path>
               </svg>
@@ -74,8 +160,10 @@ const Items = () => {
               </div>
               <span className="title-font font-medium text-2xl text-gray-900">My net worth</span><br />
               <div className="flex">
-                <span className="title-font font-medium text-2xl text-gray-900">Ξ 58.00</span>
-                <button className="flex ml-auto text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded">Buy things from me</button>
+                <span className="title-font font-medium text-2xl text-gray-900 mr-52">Ξ 58.00</span>
+                <Link href="/components/items">
+                <button className="flex ml-auto text-white bg-green-500 border-0 ml-20 py-2 px-6 ml-10 focus:outline-none hover:bg-green-600 rounded">Buy things from me</button>
+                </Link>
                 <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
                   <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5" viewBox="0 0 24 24">
                     <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
@@ -87,6 +175,41 @@ const Items = () => {
           </div>
         </div>
       </section>
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+          <Image src="/etherium.png" alt="Farmer images" height="100" width="200" className="ml-44 mb-5" />
+            <h3 className="text-4xl text-center mb-4">Oops...</h3>
+            <p className="text-2xl">You dont have enough etherium to buy this vegetable</p>
+            <p className="text-center mt-1 text-xl">You corrently have <span className="text-red-700">0</span> ETH</p>
+            <button onClick={closePopup} className="bg-red-400 text-white pl-3 pr-3 pt-1 pb-1 rounded-xl mt-5 closeButton">Close</button>
+          </div>
+        </div>
+      )}
+      <style jsx>{`
+      .closeButton {
+        margin-left: 240px;
+      }
+        .popup-overlay {
+          z-index: 20;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding-top: 100px;
+        }
+
+        .popup-content {
+          background-color: white;
+          padding: 20px;
+          border-radius: 5px;
+        }
+      `}</style>
       <section className="">
         <h2 className="text-center text-5xl font-bold pt-10">Here are the things that we have</h2>
         <p className='text-center mt-5 text-xl'>"Eat your veggies, they'll keep you fit, strong and hearty,
@@ -101,7 +224,7 @@ const Items = () => {
                 <h3 className="text-white-500 text-xs tracking-widest title-font mb-1">CATEGORY VEGETABLES</h3>
                 <h2 className="text-white-900 title-font text-lg font-medium">Tomato</h2>
                 <p className="mt-1">Ξ 0.001 ETH</p>
-                <button className="bg-lime-400 pl-5 pr-5 pt-2 pb-2 mt-2 rounded-xl" onCLick={() => handleBuyNowClick()}>Buy</button>
+                <button className="bg-lime-400 pl-5 pr-5 pt-2 pb-2 mt-2 rounded-xl" onClick={handleBuyNowClick}>Buy</button>
               </div>
             </div>
             <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
@@ -112,7 +235,7 @@ const Items = () => {
                 <h3 className="text-white-500 text-xs tracking-widest title-font mb-1">CATEGORY VEGETABLES</h3>
                 <h2 className="text-white-900 title-font text-lg font-medium">Onion</h2>
                 <p className="mt-1">Ξ 0.006 ETH</p>
-                <button className="bg-lime-400 pl-5 pr-5 pt-2 pb-2 mt-2 rounded-xl"  onCLick={() => handleBuyNowClick()}>Buy</button>
+                <button className="bg-lime-400 pl-5 pr-5 pt-2 pb-2 mt-2 rounded-xl"  onClick={handleBuyNowClick}>Buy</button>
               </div>
             </div>
             <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
@@ -123,7 +246,7 @@ const Items = () => {
                 <h3 className="text-white-500 text-xs tracking-widest title-font mb-1">CATEGORY VEGETABLES</h3>
                 <h2 className="text-white-900 title-font text-lg font-medium">Potato</h2>
                 <p className="mt-1">Ξ 0.005 ETH</p>
-                <button className="bg-lime-400 pl-5 pr-5 pt-2 pb-2 mt-2 rounded-xl"  onCLick={() => handleBuyNowClick()}>Buy</button>
+                <button className="bg-lime-400 pl-5 pr-5 pt-2 pb-2 mt-2 rounded-xl"  onClick={handleBuyNowClick}>Buy</button>
               </div>
             </div>
             <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
@@ -134,7 +257,7 @@ const Items = () => {
                 <h3 className="text-white-500 text-xs tracking-widest title-font mb-1">CATEGORY VEGETABLES</h3>
                 <h2 className="text-white-900 title-font text-lg font-medium">Brinjal</h2>
                 <p className="mt-1">Ξ 0.005 ETH</p>
-                <button className="bg-lime-400 pl-5 pr-5 pt-2 pb-2 mt-2 rounded-xl"  onCLick={() => handleBuyNowClick()}>Buy</button>
+                <button className="bg-lime-400 pl-5 pr-5 pt-2 pb-2 mt-2 rounded-xl"  onClick={handleBuyNowClick}>Buy</button>
               </div>
             </div>
             <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
@@ -146,7 +269,7 @@ const Items = () => {
                 <h3 className="text-white-500 text-xs tracking-widest title-font mb-1">CATEGORY VEGETABLES</h3>
                 <h2 className="text-white-900 title-font text-lg font-medium">Lady finger</h2>
                 <p className="mt-1">Ξ 0.005 ETH</p>
-                <button className="bg-lime-400 pl-5 pr-5 pt-2 pb-2 mt-2 rounded-xl"  onCLick={() => handleBuyNowClick()}>Buy</button>
+                <button className="bg-lime-400 pl-5 pr-5 pt-2 pb-2 mt-2 rounded-xl"  onClick={handleBuyNowClick}>Buy</button>
               </div>
             </div>
             <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
@@ -157,7 +280,7 @@ const Items = () => {
                 <h3 className="text-white-500 text-xs tracking-widest title-font mb-1">CATEGORY VEGETABLES</h3>
                 <h2 className="text-white-900 title-font text-lg font-medium">Green chillies</h2>
                 <p className="mt-1">Ξ 0.005 ETH</p>
-                <button className="bg-lime-400 pl-5 pr-5 pt-2 pb-2 mt-2 rounded-xl"  onCLick={() => handleBuyNowClick()}>Buy</button>
+                <button className="bg-lime-400 pl-5 pr-5 pt-2 pb-2 mt-2 rounded-xl"  onClick={handleBuyNowClick}>Buy</button>
               </div>
             </div>
             <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
@@ -169,18 +292,18 @@ const Items = () => {
                 <h3 className="text-white-500 text-xs tracking-widest title-font mb-1">CATEGORY VEGETABLES</h3>
                 <h2 className="text-white-900 title-font text-lg font-medium">Pumkin</h2>
                 <p className="mt-1">Ξ 0.005 ETH</p>
-                <button className="bg-lime-400 pl-5 pr-5 pt-2 pb-2 mt-2 rounded-xl"  onCLick={() => handleBuyNowClick()}>Buy</button>
+                <button className="bg-lime-400 pl-5 pr-5 pt-2 pb-2 mt-2 rounded-xl"  onClick={handleBuyNowClick}>Buy</button>
               </div>
             </div>
             <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
               <a className="block relative h-48 rounded overflow-hidden">
-                <Image src="/brocoli.jpg" alt="Vegetables" width="600" height="500" className='rounded-2xl' />
+                 <Image src="/Beetroot.jpg" alt="Vegetables" width="600" height="500" className='rounded-2xl' />
               </a>
               <div className="mt-4">
                 <h3 className="text-white-500 text-xs tracking-widest title-font mb-1">CATEGORY VEGETABLES</h3>
-                <h2 className="text-white-900 title-font text-lg font-medium">Brocoli</h2>
+                <h2 className="text-white-900 title-font text-lg font-medium">Beetroot</h2>
                 <p className="mt-1">Ξ 0.005 ETH</p>
-                <button className="bg-lime-400 pl-5 pr-5 pt-2 pb-2 mt-2 rounded-xl"  onCLick={() => handleBuyNowClick()}>Buy</button>
+                <button className="bg-lime-400 pl-5 pr-5 pt-2 pb-2 mt-2 rounded-xl"  onClick={handleBuyNowClick}>Buy</button>
               </div>
             </div>
           </div>

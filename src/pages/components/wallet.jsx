@@ -11,8 +11,6 @@ function Wallet() {
   const [walletBalance, setWalletBalance] = useState("");
 
   useEffect(() => {
-    // Gpt thunai
-
     async function getWalletInfo() {
       if (window.ethereum) {
         const web3 = new Web3(window.ethereum);
@@ -82,7 +80,7 @@ export default function MyPage() {
           About
         </Link>
         <Link href="/components/items" className="mr-5 hover:text-gray-400">
-          Items
+          Products
         </Link>
         <Link href="/components/contact" className="mr-5 hover:text-gray-400">Contact
         </Link>

@@ -30,7 +30,7 @@ const About = () => {
                     About
                   </Link>
                   <Link href="/components/items" className="mr-5 hover:text-gray-400">
-                    Items
+                    Products
                   </Link>
                   <Link href="/components/contact" className="mr-5 hover:text-gray-400">Contact
                   </Link>
@@ -38,7 +38,7 @@ const About = () => {
                   </Link>
                 </nav>
                 <Link href="/components/items">
-                <button className="inline-flex items-center bg-gradient-to-r from-lime-500 to-green-600 border-0 py-2 px-6 focus:outline-none hover:bg-gradient-to-l from-green-500 to-lime-600 text-white border-0 -mr-10 py-2 px-5 rounded text-base mt-4 md:mt-0">Buy Necessity
+                <button className="inline-flex items-center bg-gradient-to-r from-lime-500 to-green-600 border-0 py-2 px-6 focus:outline-none hover:bg-gradient-to-l from-green-500 to-lime-600 text-white border-0 mr-10 py-2 px-5 rounded text-base mt-4 md:mt-0">Buy Necessity
                   <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                   </svg>
@@ -48,7 +48,7 @@ const About = () => {
               </div>
                 </div>
                 <div className="container mt-14 bg-dark-400">
-                <Image src="/farmer.jpg" alt="Farmer" width="600" height="500" className='rounded-2xl ml-80 mb-10 pb-10' />
+                <Image src="/farmer.jpg" alt="Farmer" width="600" height="500" className={styles.aboutImage} />
                     <h2 className="text-5xl pt-5 pl-10 pr-10 font-bold text-center">
                         FARMERS ARE THE PILLARS OF THE WORLD
                     </h2>

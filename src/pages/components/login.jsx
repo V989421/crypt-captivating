@@ -52,7 +52,7 @@ const ConnectWallet = () => {
         <div className={styles.loginBtnWrapper}>
         <h2 className={styles.loginHeader}>Doesnt get a Popup check the extentions tab and click Meta mask</h2>
         <p>Make sure you have a Pop up or a Notification in Meta mask</p>
-        <Image src="/fox.png" alt="Meta mask Logo" width="50" height="50" className='rounded-2xl ml-80 mb-10 pb-10' />
+        <Image src="/fox.png" alt="Meta mask Logo" width="50" height="50" className={styles.foxImage} />
         </div>
         </>
       )}
